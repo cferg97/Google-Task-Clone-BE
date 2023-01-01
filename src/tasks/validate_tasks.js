@@ -1,4 +1,7 @@
 import { checkSchema, validationResult } from "express-validator";
+import createHttpError from "http-errors";
+
+const { BadRequest, NotFound } = createHttpError;
 
 const tasksSchema = {
   content: {
@@ -19,4 +22,11 @@ export const checkTasksSchema = checkSchema(tasksSchema);
 
 export const triggerBadRequest = (req, res, next) => {
   const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    next(
+      BadRequest("Error during task validation", { errorsList: errors.array() })
+    );
+  } else {
+    next();
+  }
 };
