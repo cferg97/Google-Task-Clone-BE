@@ -4,10 +4,11 @@ import cors from "cors";
 import { join } from "path";
 import tasksRouter from "./tasks/index.js";
 import plannersRouter from "./planners/index.js";
+import * as dotenv from "dotenv";
 
 const server = express();
-
-const port = 3001;
+dotenv.config();
+const port = process.env.PORT;
 
 const publicFolderPath = join(process.cwd(), "./public");
 
@@ -16,8 +17,7 @@ server.use(cors());
 server.use(express.json());
 
 server.use("/tasks", tasksRouter);
-server.use("/planners", plannersRouter
-);
+server.use("/planners", plannersRouter);
 
 server.listen(port, () => {
   console.table(listEndpoints(server));
